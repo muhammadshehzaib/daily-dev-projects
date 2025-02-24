@@ -1,52 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
+import ProgressBar from "./ProgressBar";
+import "./App.css";
 
-const QueueExample = () => {
-  const [queue, setQueue] = useState([]);
-  const [isProcessing, setIsProcessing] = useState(false);
+const App = () => {
+  const [progressBar, setProgressBar] = useState([]);
+  const [queue, setQueue] = useState([])
 
-  const addToQueue = (task) => {
-    setQueue((prevQueue) => [...prevQueue, task]);
+  console.log("progressBar.length : ",progressBar.length)
+
+
+  const handleClickBar = () => {
+      setProgressBar((prev) => [...prev, { id: Date.now() }]);
   };
 
-  const processQueue = async () => {
-    if (queue.length === 0) return;
-    
-    setIsProcessing(true);
 
-    const task = queue[0];
 
-    await task();
-
-    setQueue((prevQueue) => prevQueue.slice(1));
-
-    setIsProcessing(false);
-  };
-
-  useEffect(() => {
-    if (!isProcessing && queue.length > 0) {
-      processQueue();
-    }
-  }, [queue, isProcessing]);
-
-  const task1 = async () => {
-    console.log('Processing Task 1');
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log('Task 1 Complete');
-  };
-  
-  const task2 = async () => {
-    console.log('Processing Task 2');
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log('Task 2 Complete');
-  };
   return (
-    <div>
-      <h2>Queue Example</h2>
-      <button onClick={() => addToQueue(task1)}>Add Task 1</button>
-      <button onClick={() => addToQueue(task2)}>Add Task 2</button>
-      <p>Queue Length: {queue.length}</p>
+    <div className="main">
+      <div className="button">
+      <button onClick={handleClickBar}>Create Progress Bar</button>
+      </div>
+      <div className="app">
+
+        {progressBar.length> progressBar.map((bar) => {
+          return <ProgressBar key={bar.id} />;
+        })}
+      </div>
     </div>
   );
 };
 
-export default QueueExample;
+export default App;
